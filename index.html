@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DR PRABOT — Perabot Rumah Tangga</title>
+  <meta name="description" content="Toko resmi DR PRABOT: Ember, Rak, Tupperware, Dapur. Grosir & Eceran. Kirim seluruh Indonesia.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧺</text></svg>">
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* ✅ Warna hijau ala Tokopedia */
+      --primary: #00C853;
+      --primary-light: #1DE9B6;
+      --accent: #007A33;
+      --text: #2d3748;
+      --bg: #f9fbf9;
+      --card: #ffffff;
+      --gold: #FFAB00;
+      --red: #FF3B30;
+      --gray: #e0e0e0;
+      --dark: #1a202c;
+      --radius: 16px;
+      --shadow: 0 8px 30px rgba(0, 200, 83, 0.15);
+      --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f0faf0 0%, #e8f5e8 100%);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+
+    /* === HEADER === */
+    header {
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      color: white;
+      padding: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
+      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo { font-size: 24px; font-weight: 800; }
+    .header-actions { display: flex; gap: 16px; align-items: center; }
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+    .icon-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+    }
+    .badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: var(--red);
+      color: white;
+      font-size: 10px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* === HERO === */
+    .hero {
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      color: white;
+      padding: 40px 20px;
+      border-radius: 20px;
+      margin: 24px 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero h1 { font-size: 32px; font-weight: 800; margin-bottom: 12px; }
+    .hero p { font-size: 18px; opacity: 0.95; max-width: 600px; margin: 0 auto 20px; }
+
+    /* === SEARCH & FILTER === */
+    .search-filter {
+      background: var(--card);
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      margin: 24px 0;
+    }
+    .search-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .search-input {
+      flex: 1;
+      padding: 14px 20px;
+      border-radius: 12px;
+      border: 1px solid var(--gray);
+      font-size: 16px;
+    }
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .filter-group { flex: 1; min-width: 200px; }
+    .filter-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--dark); }
+    .price-slider { width: 100%; }
+
+    /* === KATEGORI === */
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 28px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::after {
+      content: ""; flex: 1; height: 1px; background: var(--primary); opacity: 0.2;
+    }
+    .categories {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      scrollbar-width: none;
+    }
+    .categories::-webkit-scrollbar { display: none; }
+    .category {
+      min-width: 120px;
+      padding: 14px;
+      text-align: center;
+      background: var(--card);
+      border-radius: 16px;
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--primary);
+      border: 2px solid transparent;
+      transition: var(--transition);
+    }
+    .category:hover, .category.active {
+      border-color: var(--primary);
+      background: rgba(0, 200, 83, 0.08);
+      color: var(--accent);
+    }
+
+    /* === PRODUK === */
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 24px;
+      margin-top: 16px;
+    }
+    .product-card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      position: relative;
+      transition: var(--transition);
+    }
+    .product-card:hover { transform: translateY(-6px); }
+
+    /* ✅ RASIO GAMBAR 1:1 SEMPURNA DI SEMUA PERANGKAT */
+    .product-img {
+      width: 100%;
+      aspect-ratio: 1 / 1; /* 🔑 KUNCI UTAMA */
+      background-size: cover;
+      background-position: center;
+      border-radius: 16px;
+      margin-bottom: 14px;
+    }
+
+    .tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 20px;
+      color: white;
+      z-index: 2;
+    }
+    .tag.trending { background: var(--gold); }
+    .tag.best { background: #4CAF50; }
+    .tag.sale { background: var(--red); }
+    .tag.premium { background: #9C27B0; }
+
+    .product-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 8px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .rating {
+      color: gold;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .price-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .price-current { font-weight: 800; font-size: 18px; color: var(--accent); }
+    .price-old { text-decoration: line-through; color: #999; font-size: 14px; }
+    .stock { font-size: 12px; color: var(--primary); margin-bottom: 12px; }
+    .product-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-cart { background: var(--primary); color: white; }
+    .btn-wish {
+      background: #f5f5f5;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-wish.active { color: var(--red); }
+
+    /* === NOTIFICATION PANEL === */
+    .notification-panel {
+      position: fixed;
+      top: 70px;
+      right: 24px;
+      width: 320px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      z-index: 999;
+      display: none;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .notification-header {
+      padding: 16px;
+      border-bottom: 1px solid #eee;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .notification-item {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    .notification-item.unread { background: #f0fff4; }
+    .notification-item:last-child { border: none; }
+
+    /* === MODAL DETAIL (FULL SCREEN) === */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+    .modal {
+      background: white;
+      width: 95%;
+      max-width: 900px;
+      border-radius: 20px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    /* === CART SIDEBAR === */
+    .cart-sidebar {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 380px;
+      height: 100vh;
+      background: white;
+      box-shadow: -5px 0 30px rgba(0,0,0,0.1);
+      z-index: 1500;
+      transition: right 0.4s ease;
+      overflow-y: auto;
+    }
+    .cart-sidebar.open { right: 0; }
+    .cart-header {
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cart-close { background: none; border: none; font-size: 24px; cursor: pointer; }
+    .cart-items { padding: 0 20px; }
+    .cart-item {
+      display: flex;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .cart-thumb {
+      width: 70px;
+      height: 70px;
+      border-radius: 12px;
+      background-size: cover;
+    }
+    .cart-info { flex: 1; }
+    .cart-actions {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+      background: #f9f9f9;
+      position: sticky;
+      bottom: 0;
+    }
+    .btn-checkout {
+      background: var(--primary);
+      color: white;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 800;
+      flex: 1;
+      margin-right: 12px;
+      border: none;
+    }
+    .free-shipping {
+      text-align: center;
+      padding: 12px;
+      color: #4CAF50;
+      font-weight: 600;
+      background: #f0fff4;
+      border-radius: 12px;
+      margin: 16px 0;
+    }
+
+    /* === FLOATING BUTTONS === */
+    .floating-btn {
+      position: fixed;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      text-decoration: none;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      z-index: 999;
+      transition: var(--transition);
+    }
+    .whatsapp-btn {
+      bottom: 90px;
+      right: 24px;
+      background: #25D366; /* Warna WhatsApp resmi */
+      color: white;
+    }
+    .scroll-top {
+      bottom: 24px;
+      right: 24px;
+      background: var(--primary);
+      color: white;
+      display: none;
+    }
+    .floating-btn:hover { transform: scale(1.1); }
+
+    /* === FOOTER === */
+    footer {
+      background: var(--card);
+      padding: 40px 0 20px;
+      margin-top: 60px;
+      border-top: 1px solid #eee;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+    .footer-col h4 { color: var(--primary); margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 8px; }
+    .footer-col a { color: #666; text-decoration: none; }
+    .footer-col a:hover { color: var(--primary); }
+    .social a {
+      display: inline-block;
+      width: 36px;
+      height: 36px;
+      background: #f0f0f0;
+      border-radius: 50%;
+      margin-right: 10px;
+      text-align: center;
+      line-height: 36px;
+    }
+    .app-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .app-btn {
+      width: 120px;
+      height: 40px;
+      background: #f0f0f0;
+      border-radius: 8px;
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 768px) {
+      .products { grid-template-columns: repeat(2, 1fr); }
+      .hero h1 { font-size: 26px; }
+      .cart-sidebar { width: 100%; }
+    }
+    @media (max-width: 480px) {
+      .products { grid-template-columns: 1fr; }
+      .filter-row { flex-direction: column; }
+      .hero { padding: 24px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">DR PRABOT</div>
+    <div class="header-actions">
+      <div class="icon-btn" id="notifBtn">
+        🔔
+        <span class="badge" id="notifBadge">4</span>
+      </div>
+      <div class="icon-btn" id="cartBtn">
+        🛒
+        <span class="badge" id="cartBadge">0</span>
+      </div>
+      <div class="icon-btn" id="wishBtn">
+        ❤️
+        <span class="badge" id="wishBadge">0</span>
+      </div>
+      <div class="user-avatar">U</div>
+    </div>
+  </header>
+
+  <!-- Notification Panel -->
+  <div class="notification-panel" id="notifPanel">
+    <div class="notification-header">Notifikasi</div>
+    <div class="notification-item unread">Pesanan #123 dikirim hari ini! 🚚</div>
+    <div class="notification-item unread">Diskon 20% untuk Rak Plastik! 🔥</div>
+    <div class="notification-item">Stok Ember Premium kembali tersedia!</div>
+    <div class="notification-item">Ulasan Anda telah dipublikasikan.</div>
+  </div>
+
+  <!-- Hero -->
+  <div class="container">
+    <div class="hero">
+      <h1>Perabot Rumah Tangga Premium</h1>
+      <p>Stok lengkap • Harga grosir • Pengiriman cepat ke seluruh Indonesia</p>
+    </div>
+
+    <!-- Search & Filter -->
+    <div class="search-filter">
+      <div class="search-bar">
+        <input type="text" class="search-input" id="searchInput" placeholder="Cari produk...">
+        <select id="sortSelect" class="search-input" style="width:auto;">
+          <option value="popular">Populer</option>
+          <option value="price-asc">Harga: Terendah</option>
+          <option value="price-desc">Harga: Tertinggi</option>
+          <option value="rating">Rating Tertinggi</option>
+        </select>
+      </div>
+      <div class="filter-row">
+        <div class="filter-group">
+          <label>Harga Maks</label>
+          <input type="range" min="5000" max="150000" value="150000" class="price-slider" id="priceSlider">
+          <div>Max: <span id="priceValue">Rp150.000</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kategori -->
+    <h2 class="section-title">Kategori</h2>
+    <div class="categories" id="categories">
+      <div class="category active" data-cat="all">Semua</div>
+      <div class="category" data-cat="ember">Ember</div>
+      <div class="category" data-cat="rak">Rak</div>
+      <div class="category" data-cat="dapur">Dapur</div>
+      <div class="category" data-cat="keranjang">Keranjang</div>
+      <div class="category" data-cat="kamar_mandi">Kamar Mandi</div>
+      <div class="category" data-cat="tupperware">Tupperware</div>
+      <div class="category" data-cat="premium">Premium</div>
+    </div>
+
+    <!-- Produk -->
+    <h2 class="section-title">Produk Unggulan</h2>
+    <div class="products" id="productGrid"></div>
+  </div>
+
+  <!-- Cart Sidebar -->
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3>Keranjang Belanja</h3>
+      <button class="cart-close" id="closeCart">×</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="free-shipping" id="freeShipping">✅ Gratis Ongkir untuk belanja > Rp150.000</div>
+    <div class="cart-actions">
+      <div><strong id="cartTotal">Rp0</strong></div>
+      <button class="btn-checkout" id="checkoutBtn">Checkout via WhatsApp</button>
+    </div>
+  </div>
+
+  <!-- Modal Detail -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" id="productModal"></div>
+  </div>
+
+  <!-- Floating Buttons -->
+  <!-- ✅ LINK WHATSAPP TANPA ERROR — TANPA SPASI — FORMAT BENAR -->
+  <a href="https://wa.me/6285823431349?text=Halo%20DR%20PRABOT%2C%20saya%20mau%20tanya%20produk!" 
+     class="floating-btn whatsapp-btn" target="_blank" rel="noopener" aria-label="Chat via WhatsApp">💬</a>
+  <button class="floating-btn scroll-top" id="scrollTopBtn">↑</button>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>DR PRABOT</h4>
+          <p>Perabot rumah tangga berkualitas dengan harga terjangkau.</p>
+          <div class="social">
+            <a href="#">📱</a>
+            <a href="#">📘</a>
+            <a href="#">📸</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Layanan</h4>
+          <ul>
+            <li><a href="#">Bantuan & FAQ</a></li>
+            <li><a href="#">Kebijakan Pengiriman</a></li>
+            <li><a href="#">Garansi Produk</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Download Aplikasi</h4>
+          <div class="app-buttons">
+            <div class="app-btn">App Store</div>
+            <div class="app-btn">Google Play</div>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Kontak</h4>
+          <ul>
+            <li>📱 +62 858-2343-1349</li>
+            <li>📧 info@drprabot.com</li>
+            <li>📍 Surabaya, Jawa Timur</li>
+          </ul>
+        </div>
+      </div>
+      <div style="text-align:center; padding-top:20px; color:#777;">
+        © 2025 DR PRABOT — Marketplace Perabot Rumah Tangga
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ✅ DATA PRODUK LENGKAP (12 produk, 8 kategori)
+    const PRODUCTS = [
+      { id: 1, name: "Ember Plastik Premium 20L", category: "ember", price: 25000, oldPrice: 30000, img: "https://drprabot5.wordpress.com/wp-content/uploads/2025/10/wp-17614426803162430788670276109900.jpg", rating: 4.8, reviews: 124, stock: 50, tag: "best", meta: "Merah, Hijau, Biru", desc: "Ember kuat dengan pegangan ergonomis.", spec: "Bahan: PP Food Grade • Kapasitas: 20L", shipping: "1-2 hari", warranty: "7 hari" },
+      { id: 2, name: "Rak Plastik 3 Susun", category: "rak", price: 65000, oldPrice: null, img: "https://drprabot5.wordpress.com/wp-content/uploads/2025/10/img_20251024_1930224555993642886114808.jpg", rating: 4.7, reviews: 89, stock: 30, tag: "trending", meta: "Biru, Merah", desc: "Rak serbaguna untuk kamar atau dapur.", spec: "Dimensi: 35x25x75cm • Beban: 10kg/susun", shipping: "1-3 hari", warranty: "14 hari" },
+      { id: 3, name: "Keranjang Baju Lipat Large", category: "keranjang", price: 32000, oldPrice: 38000, img: "https://drprabot5.wordpress.com/wp-content/uploads/2025/10/img_20251024_1930065955777248363634109.jpg", rating: 4.9, reviews: 210, stock: 20, tag: "sale", meta: "Biru, Hijau, Pink", desc: "Ringan dan mudah dilipat.", spec: "Bahan: Oxford Fabric • Ukuran: Large", shipping: "1-2 hari", warranty: "7 hari" },
+      { id: 4, name: "Centong Nasi Warna", category: "dapur", price: 7000, oldPrice: null, img: "https://drprabot5.wordpress.com/wp-content/uploads/2025/10/img_20251024_1930537454611359479725355.jpg", rating: 4.5, reviews: 67, stock: 100, tag: "", meta: "Merah, Hijau, Putih", desc: "Tahan panas hingga 120°C.", spec: "Bahan: Nylon • Panjang: 28cm", shipping: "1 hari", warranty: "7 hari" },
+      { id: 5, name: "Rak Sabun Tempel", category: "kamar_mandi", price: 12000, oldPrice: 15000, img: "https://drprabot5.wordpress.com/wp-content/uploads/2025/10/img_20251024_1931325320063416960716112.jpg", rating: 4.6, reviews: 45, stock: 40, tag: "sale", meta: "Putih, Pink", desc: "Tanpa paku, mudah dipasang.", spec: "Bahan: ABS • Tahan air", shipping: "1-2 hari", warranty: "7 hari" },
+      { id: 6, name: "Gayung Plastik", category: "kamar_mandi", price: 6000, oldPrice: null, img: "https://drprabot5.wordpress.com/wp-content/uploads/2025/10/img_20251024_1931388839002316646014137.jpg", rating: 4.4, reviews: 32, stock: 80, tag: "", meta: "Biru, Hijau, Pink", desc: "Ringan dan tahan lama.", spec: "Kapasitas: 1.5L", shipping: "1 hari", warranty: "7 hari" },
+      { id: 7, name: "Ember Kotak 18L", category: "ember", price: 28000, oldPrice: null, img: "https://drprabot5.wordpress.com/wp-content/uploads/2025/10/img_20251024_1929584822231379451442353.jpg", rating: 4.7, reviews: 78, stock: 25, tag: "best", meta: "Abu, Hitam", desc: "Desain kotak hemat ruang.", spec: "Bahan: PP • Kapasitas: 18L", shipping: "1-2 hari", warranty: "7 hari" },
+      { id: 8, name: "Rak 4 Susun Premium", category: "premium", price: 120000, oldPrice: 140000, img: "https://drprabot5.wordpress.com/wp-content/uploads/2025/10/img_20251024_1930289229138052614894810.jpg", rating: 4.9, reviews: 56, stock: 15, tag: "premium", meta: "Abu, Biru", desc: "Rak premium dengan lapisan anti-slip.", spec: "Beban: 15kg/susun • Garansi 1 bulan", shipping: "2-3 hari", warranty: "30 hari" },
+      { id: 9, name: "Toples Makanan Kecil", category: "tupperware", price: 10000, oldPrice: 12000, img: "https://drprabot5.wordpress.com/wp-content/uploads/2025/10/img_20251024_1931151816987139039372557.jpg", rating: 4.5, reviews: 92, stock: 60, tag: "sale", meta: "Putih, Pink", desc: "Kedap udara dan tahan bocor.", spec: "Kapasitas: 500ml", shipping: "1-2 hari", warranty: "7 hari" },
+      { id: 10, name: "Gelas Plastik Set 6 pcs", category: "dapur", price: 18000, oldPrice: null, img: "https://drprabot5.wordpress.com/wp-content/uploads/2025/10/img_20251024_1931088572723144853428225.jpg", rating: 4.6, reviews: 104, stock: 70, tag: "trending", meta: "Random", desc: "Tahan jatuh dan ringan.", spec: "Bahan: Tritan • BPA Free", shipping: "1 hari", warranty: "7 hari" },
+      { id: 11, name: "Kotak Peralatan Serbaguna", category: "premium", price: 45000, oldPrice: 50000, img: "https://drprabot5.wordpress.com/wp-content/uploads/2025/10/img_20251024_1931218883438807753429609.jpg", rating: 4.8, reviews: 63, stock: 22, tag: "premium", meta: "Abu, Hijau", desc: "Multifungsi untuk rumah atau kantor.", spec: "3 kompartemen • Tahan air", shipping: "1-2 hari", warranty: "14 hari" },
+      { id: 12, name: "Baskom Plastik Besar", category: "dapur", price: 30000, oldPrice: 35000, img: "https://drprabot5.wordpress.com/wp-content/uploads/2025/10/img_20251024_1931010294938057435776875.jpg", rating: 4.7, reviews: 88, stock: 35, tag: "best", meta: "Biru, Hijau", desc: "Tebal dan tidak mudah retak.", spec: "Diameter: 30cm • Kapasitas: 10L", shipping: "1-2 hari", warranty: "7 hari" }
+    ];
+
+    // STATE
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    let wishlist = JSON.parse(localStorage.getItem('wishlist') || '{}');
+    let filtered = [...PRODUCTS];
+
+    // HELPERS
+    const formatRupiah = (n) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n);
+    const renderStars = (rating) => '⭐'.repeat(Math.floor(rating)) + '☆'.repeat(5 - Math.floor(rating));
+
+    // RENDER PRODUK
+    function renderProducts(list) {
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = '';
+      list.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        const inWish = wishlist[p.id];
+        card.innerHTML = `
+          ${p.tag ? `<div class="tag ${p.tag}">${({trending:'Trending',best:'Terlaris',sale:'Sale',premium:'Premium'})[p.tag]}</div>` : ''}
+          <div class="product-img" style="background-image: url('${p.img}')"></div>
+          <div class="product-name">${p.name}</div>
+          <div class="rating">${renderStars(p.rating)} (${p.reviews})</div>
+          <div class="price-row">
+            <div class="price-current">${formatRupiah(p.price)}</div>
+            ${p.oldPrice ? `<div class="price-old">${formatRupiah(p.oldPrice)}</div>` : ''}
+          </div>
+          <div class="stock">Stok: ${p.stock} tersedia</div>
+          <div class="product-actions">
+            <button class="btn btn-cart" data-id="${p.id}">+ Keranjang</button>
+            <button class="btn btn-wish ${inWish ? 'active' : ''}" data-id="${p.id}">❤️</button>
+          </div>
+        `;
+        grid.appendChild(card);
+
+        card.querySelector('.btn-cart').addEventListener('click', () => addToCart(p));
+        card.querySelector('.btn-wish').addEventListener((e) => {
+          toggleWishlist(p.id);
+          e.target.classList.toggle('active');
+          updateBadges();
+        });
+        card.querySelector('.product-img').addEventListener('click', () => openModal(p));
+      });
+    }
+
+    // CART
+    function addToCart(product) {
+      const existing = cart.find(i => i.id === product.id);
+      if (existing) existing.qty++; else cart.push({ ...product, qty: 1 });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateBadges();
+      alert('✅ Produk ditambahkan ke keranjang!');
+    }
+
+    function renderCart() {
+      const container = document.getElementById('cartItems');
+      const totalEl = document.getElementById('cartTotal');
+      const freeShipping = document.getElementById('freeShipping');
+
+      container.innerHTML = '';
+      if (cart.length === 0) {
+        container.innerHTML = '<p style="padding:20px;text-align:center;color:#777;">Keranjang kosong</p>';
+        totalEl.textContent = formatRupiah(0);
+        freeShipping.style.display = 'none';
+        return;
+      }
+
+      let total = 0;
+      cart.forEach((item, idx) => {
+        total += item.price * item.qty;
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <div class="cart-thumb" style="background-image:url('${item.img}')"></div>
+          <div class="cart-info">
+            <div>${item.name}</div>
+            <div>${formatRupiah(item.price)} × ${item.qty}</div>
+            <div style="margin-top:8px">
+              <button onclick="updateQty(${idx}, -1)">−</button>
+              <span style="margin:0 8px">${item.qty}</span>
+              <button onclick="updateQty(${idx}, 1)">+</button>
+              <button style="color:red;margin-left:10px;" onclick="removeItem(${idx})">×</button>
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+
+      totalEl.textContent = formatRupiah(total);
+      freeShipping.style.display = total >= 150000 ? 'block' : 'none';
+    }
+
+    // WISHLIST
+    function toggleWishlist(id) {
+      if (wishlist[id]) delete wishlist[id]; else wishlist[id] = true;
+      localStorage.setItem('wishlist', JSON.stringify(wishlist));
+    }
+
+    // UPDATE BADGES
+    function updateBadges() {
+      document.getElementById('cartBadge').textContent = cart.reduce((s,i) => s + i.qty, 0) || '';
+      document.getElementById('wishBadge').textContent = Object.keys(wishlist).length || '';
+    }
+
+    // FILTER & SEARCH
+    function applyFilters() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const cat = document.querySelector('.category.active').dataset.cat;
+      const maxPrice = parseInt(document.getElementById('priceSlider').value);
+      const sort = document.getElementById('sortSelect').value;
+
+      let result = PRODUCTS.filter(p => {
+        const matchCat = cat === 'all' || p.category === cat;
+        const matchSearch = p.name.toLowerCase().includes(q) || p.meta.toLowerCase().includes(q);
+        const matchPrice = p.price <= maxPrice;
+        return matchCat && matchSearch && matchPrice;
+      });
+
+      if (sort === 'price-asc') result.sort((a,b) => a.price - b.price);
+      if (sort === 'price-desc') result.sort((a,b) => b.price - a.price);
+      if (sort === 'rating') result.sort((a,b) => b.rating - a.rating);
+      if (sort === 'popular') result.sort((a,b) => b.reviews - a.reviews);
+
+      filtered = result;
+      renderProducts(filtered);
+    }
+
+    // MODAL DETAIL
+    function openModal(product) {
+      const reviews = [
+        { name: "Budi S.", rating: 5, text: "Kualitas luar biasa! Sudah 3 bulan dipakai masih bagus." },
+        { name: "Siti R.", rating: 4, text: "Pengiriman cepat, packing rapi." },
+        { name: "Andi P.", rating: 5, text: "Harga murah, barang bagus. Recomended!" }
+      ];
+
+      document.getElementById('productModal').innerHTML = `
+        <div style="padding:24px;">
+          <div style="display:flex;gap:24px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:250px;">
+              <div style="width:100%;aspect-ratio:1/1;background-image:url('${product.img}');background-size:cover;border-radius:16px;"></div>
+            </div>
+            <div style="flex:2;min-width:250px;">
+              <h2>${product.name}</h2>
+              <div class="rating">${renderStars(product.rating)} (${product.reviews} ulasan)</div>
+              <div style="margin:12px 0;">
+                <span class="price-current">${formatRupiah(product.price)}</span>
+                ${product.oldPrice ? `<span class="price-old" style="margin-left:8px;">${formatRupiah(product.oldPrice)}</span>` : ''}
+              </div>
+              <p>${product.desc}</p>
+              <h4>Spesifikasi</h4>
+              <p>${product.spec}</p>
+              <h4>Pengiriman & Garansi</h4>
+              <p>🚚 ${product.shipping} • 🛡️ Garansi ${product.warranty}</p>
+              <div style="margin-top:20px;display:flex;gap:12px;">
+                <button class="btn btn-cart" onclick="addToCartFromModal(${product.id})">+ Keranjang</button>
+                <button class="btn btn-wish" onclick="toggleWishInModal(${product.id})">❤️ Wishlist</button>
+              </div>
+            </div>
+          </div>
+          <h3 style="margin:30px 0 16px;">Ulasan Pelanggan</h3>
+          ${reviews.map(r => `
+            <div style="padding:12px;border-bottom:1px solid #eee;">
+              <div><strong>${r.name}</strong> • ${renderStars(r.rating)}</div>
+              <div>${r.text}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      document.getElementById('modalBackdrop').style.display = 'flex';
+    }
+
+    // EVENT LISTENERS
+    document.querySelectorAll('.category').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.category').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyFilters();
+      });
+    });
+
+    document.getElementById('searchInput').addEventListener('input', applyFilters);
+    document.getElementById('priceSlider').addEventListener('input', (e) => {
+      document.getElementById('priceValue').textContent = formatRupiah(e.target.value);
+      applyFilters();
+    });
+    document.getElementById('sortSelect').addEventListener('change', applyFilters);
+
+    // CART SIDEBAR
+    document.getElementById('cartBtn').addEventListener('click', () => {
+      document.getElementById('cartSidebar').classList.add('open');
+      renderCart();
+    });
+    document.getElementById('closeCart').addEventListener('click', () => {
+      document.getElementById('cartSidebar').classList.remove('open');
+    });
+
+    // NOTIF PANEL
+    document.getElementById('notifBtn').addEventListener('click', () => {
+      const panel = document.getElementById('notifPanel');
+      panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // SCROLL TOP
+    window.addEventListener('scroll', () => {
+      document.getElementById('scrollTopBtn').style.display = window.scrollY > 300 ? 'flex' : 'none';
+    });
+    document.getElementById('scrollTopBtn').addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+
+    // MODAL CLOSE
+    document.getElementById('modalBackdrop').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('modalBackdrop')) {
+        document.getElementById('modalBackdrop').style.display = 'none';
+      }
+    });
+
+    // ✅ CHECKOUT VIA WHATSAPP — TANPA ERROR
+    document.getElementById('checkoutBtn').addEventListener('click', () => {
+      if (cart.length === 0) return alert('Keranjang kosong!');
+      const items = cart.map(i => `• ${i.name} x${i.qty} = ${formatRupiah(i.price * i.qty)}`).join('%0A');
+      const total = cart.reduce((s,i) => s + i.price * i.qty, 0);
+      const msg = `Halo DR PRABOT,%0A%0ASaya ingin memesan:%0A${items}%0A%0ATotal: ${formatRupiah(total)}%0A%0AAlamat: [isi alamat]%0A%0ATerima kasih!`;
+      // ✅ URL DIBERSIHKAN — TIDAK ADA SPASI — MENGGUNAKAN encodeURIComponent
+      window.open(`https://wa.me/6285823431349?text=${encodeURIComponent(msg)}`, '_blank');
+    });
+
+    // INIT
+    renderProducts(PRODUCTS);
+    updateBadges();
+
+    // GLOBAL FUNCTIONS
+    window.updateQty = (idx, delta) => {
+      cart[idx].qty += delta;
+      if (cart[idx].qty <= 0) cart.splice(idx, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      renderCart();
+      updateBadges();
+    };
+    window.removeItem = (idx) => {
+      cart.splice(idx, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      renderCart();
+      updateBadges();
+    };
+    window.addToCartFromModal = (id) => {
+      const p = PRODUCTS.find(x => x.id === id);
+      addToCart(p);
+    };
+    window.toggleWishInModal = (id) => {
+      toggleWishlist(id);
+      updateBadges();
+    };
+  </script>
+</body>
+</html>
